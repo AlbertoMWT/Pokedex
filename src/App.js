@@ -1,56 +1,40 @@
-import {useState, useEffect} from 'react';
-import PokemonThumnails from './components/PokemonThumnails';
+import { useState } from "react";
+import AllPokemons from "./components/AllPokemons";
+import SearchBar from "./components/SearchBar";
 
 function App() {
+    const [allPok, setAllPok] = useState();
 
-  const [allPokemons, setAllPokemons] = useState([])
-  const [loadMore, setloadMore] = useState('https://pokeapi.co/api/v2/pokemon?limit=20')
+    const showPok = (e) => {
+        setAllPok(true);
+    };
 
-  const getAllPokemons = async() => {
-    const res = await fetch(loadMore)
-    const data = await res?.json()
-
-    setloadMore(data.next)
-
-    function createPokemonObject (result){
-      result?.forEach( async (pokemon) => {
-        const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon?.name}`)
-        const data = await res?.json()
-
-        setAllPokemons(currentList => [...currentList, data])
-        
-      })
-    }
-    
-    createPokemonObject(data.results);
-    await console.log(allPokemons)
-  } 
-
-  useEffect(() => {
-    getAllPokemons()
-  }, [])
-  
-
-  return (
-    <div className="app-container">
-      <h1>Pokédex</h1>
-      <div className="pokemon-container">
-        <div className="all-container" >
-          { allPokemons?.map((pokemon, index) => 
-            <PokemonThumnails
-            id={pokemon?.id}
-            name={pokemon?.name}
-            image={pokemon?.sprites?.other?.dream_world?.front_default}
-            type={pokemon?.types[0]?.type?.name}
-            key={index}
+    return (
+        <div className="app-container">
+            <img
+                className="img"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Pok%C3%A9mon_GO_logo.svg/2560px-Pok%C3%A9mon_GO_logo.svg.png"
+                alt=""
             />
-          )
-          }
+            <SearchBar />
+
+            <div className="Pokemon">
+                <div className="btn-group">
+                    <div className="btn ball">
+                        <button onClick={showPok}>
+                            <div className="pokemon-ball"></div>
+                            <a>
+                                Show All Pokémons{" "}
+                                <span data-letters="Let's Go!"></span>
+                                <span data-letters="Let's Go!"></span>
+                            </a>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {allPok && <AllPokemons />}
         </div>
-        <button className="load-more" onClick={() => getAllPokemons()} >Load more</button>
-      </div>
-    </div>
-  );
+    );
 }
 
 export default App;

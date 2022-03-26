@@ -4,6 +4,7 @@ const PokemonThumnails = ({id, name, image, type}) => {
 
     const style = `thumb-container ${type}`
     return (
+        
     <div className={style} >
         <div className='number' >
             <small>#0{id}</small>
